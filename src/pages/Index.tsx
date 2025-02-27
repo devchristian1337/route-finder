@@ -1,12 +1,24 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from 'react';
+import Header from '../components/Header';
+import UrlInput from '../components/UrlInput';
+import RouteList from '../components/RouteList';
+import { Toaster } from '@/components/ui/sonner';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen flex flex-col items-center bg-gradient-subtle from-background via-white to-background pb-20">
+      <Toaster position="top-center" />
+      
+      <div className="w-full max-w-5xl mx-auto pt-12 md:pt-20 px-4 space-y-10">
+        <Header />
+        <UrlInput />
+        <RouteList />
       </div>
+      
+      <footer className="mt-auto w-full text-center py-6 text-sm text-muted-foreground">
+        <p>Route Finder &copy; {new Date().getFullYear()} • Built with precision and care</p>
+      </footer>
     </div>
   );
 };
