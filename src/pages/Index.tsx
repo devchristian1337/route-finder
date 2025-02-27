@@ -4,17 +4,27 @@ import UrlInput from "../components/UrlInput";
 import RouteList from "../components/RouteList";
 import { useTheme } from "../lib/useTheme";
 import { ThemeSwitcher } from "../components/ThemeSwitcher";
+import { DotPattern } from "../components/ui/dot-pattern";
 
 const Index = () => {
   // We no longer need to handle theme changes here since ThemeSwitcher does it internally
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gradient-subtle from-background via-white to-background dark:from-background dark:via-background/90 dark:to-background relative">
+    <div className="min-h-screen flex flex-col items-center bg-gradient-subtle from-slate-50 via-white to-slate-50 dark:from-background dark:via-background/90 dark:to-background relative">
+      <DotPattern
+        width={32}
+        height={32}
+        cx={16}
+        cy={16}
+        cr={1.5}
+        className="opacity-30 dark:opacity-20"
+      />
+
       <div className="absolute top-4 right-4 z-50">
         <ThemeSwitcher className="shadow-md" />
       </div>
 
-      <div className="w-full max-w-5xl mx-auto pt-12 md:pt-20 px-4 space-y-10 flex-grow">
+      <div className="w-full max-w-5xl mx-auto pt-12 md:pt-20 px-4 space-y-10 flex-grow z-10 relative">
         <div className="flex justify-between items-center">
           <Header />
         </div>
@@ -22,7 +32,7 @@ const Index = () => {
         <RouteList />
       </div>
 
-      <footer className="w-full text-center py-6 text-sm text-muted-foreground mt-16">
+      <footer className="w-full text-center py-6 text-sm text-muted-foreground mt-16 relative z-10">
         <p className="flex items-center justify-center gap-2 select-none">
           Made by devchristian1337
           <a

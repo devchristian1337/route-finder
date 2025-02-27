@@ -84,7 +84,9 @@ const RouteCard: React.FC<RouteCardProps> = ({
       <div
         className={`relative rounded-lg bg-card p-4 text-foreground transition-all duration-300 ${
           hovered ? "transform scale-[1.02]" : ""
-        } hover:shadow-md ${description ? "cursor-pointer" : ""}`}
+        } hover:shadow-md border border-slate-200 dark:border-slate-800 shadow-sm ${
+          description ? "cursor-pointer" : ""
+        }`}
         onClick={handleCardClick}
         tabIndex={0}
         aria-label={`Route to ${displayUrl}`}

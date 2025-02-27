@@ -75,7 +75,7 @@ const UrlInput = () => {
         <div
           className={`relative ${
             isFocused ? "glass-card shadow-lg" : "glass-card shadow-md"
-          } rounded-xl overflow-hidden flex flex-col sm:flex-row`}
+          } rounded-xl overflow-hidden flex flex-col sm:flex-row border border-slate-200 dark:border-slate-800`}
         >
           {/* Input Container - Full width on mobile, flex row on desktop */}
           <div className="flex items-center w-full">

@@ -198,7 +198,7 @@ const RouteList = () => {
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <button
             onClick={handleDownloadRoutes}
-            className="flex-1 sm:flex-initial text-sm flex items-center justify-center gap-1 px-3 py-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            className="flex-1 sm:flex-initial text-sm flex items-center justify-center gap-1 px-3 py-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors select-none"
             aria-label="Download all routes"
           >
             <span>Download All</span>
@@ -215,7 +215,7 @@ const RouteList = () => {
               href={url.startsWith("http") ? url : `https://${url}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 sm:flex-initial text-sm flex items-center justify-center gap-1 px-3 py-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors w-full"
+              className="flex-1 sm:flex-initial text-sm flex items-center justify-center gap-1 px-3 py-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors w-full select-none"
             >
               <span>Visit Site</span>
               <ExternalLink size={14} />
