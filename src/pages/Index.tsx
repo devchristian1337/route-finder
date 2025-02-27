@@ -9,8 +9,8 @@ const Index = () => {
   // We no longer need to handle theme changes here since ThemeSwitcher does it internally
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gradient-subtle from-background via-white to-background dark:from-background dark:via-background/90 dark:to-background">
-      <div className="fixed top-4 right-4 z-50">
+    <div className="min-h-screen flex flex-col items-center bg-gradient-subtle from-background via-white to-background dark:from-background dark:via-background/90 dark:to-background relative">
+      <div className="absolute top-4 right-4 z-50">
         <ThemeSwitcher className="shadow-md" />
       </div>
 
