@@ -7,7 +7,7 @@ const Header = () => {
       <div className="flex flex-col items-center space-y-4">
         <div className="flex items-center gap-2 animate-float">
           <Compass size={32} className="text-primary" />
-          <h1 className="text-3xl font-light tracking-tight">
+          <h1 className="text-3xl font-light tracking-tight select-none">
             Route<span className="font-semibold">Finder</span>
           </h1>
         </div>
