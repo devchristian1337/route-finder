@@ -1,4 +1,3 @@
-// @ts-expect-error - Ignoring TypeScript errors as they don't affect functionality
 import React, { useState } from "react";
 import { Search, ArrowRight, SlidersHorizontal } from "lucide-react";
 import { useRouteStore } from "../store/routeStore";
@@ -23,7 +22,7 @@ const UrlInput = () => {
   const [resultsCount, setResultsCount] = useState(30);
   const [isResultsPopoverOpen, setIsResultsPopoverOpen] = useState(false);
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(e.target.value);
   };
 
@@ -35,14 +34,14 @@ const UrlInput = () => {
 
   const handleBlur = () => setIsFocused(false);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (url.trim()) {
       fetchRoutes(resultsCount);
     }
   };
 
-  const handleKeyDown = (e: any) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
       if (url.trim()) {

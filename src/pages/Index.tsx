@@ -6,21 +6,12 @@ import { useTheme } from "../lib/ThemeProvider";
 import { ThemeSwitcher } from "../components/ThemeSwitcher";
 
 const Index = () => {
-  const { theme, setTheme } = useTheme();
-
-  const handleThemeChange = (newTheme: "light" | "dark" | "system") => {
-    setTheme(newTheme);
-  };
+  // We no longer need to handle theme changes here since ThemeSwitcher does it internally
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-gradient-subtle from-background via-white to-background dark:from-background dark:via-background/90 dark:to-background">
       <div className="fixed top-4 right-4 z-50">
-        <ThemeSwitcher
-          value={theme}
-          onChange={handleThemeChange}
-          defaultValue="dark"
-          className="shadow-md"
-        />
+        <ThemeSwitcher className="shadow-md" />
       </div>
 
       <div className="w-full max-w-5xl mx-auto pt-12 md:pt-20 px-4 space-y-10 flex-grow">

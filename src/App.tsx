@@ -6,18 +6,14 @@ import { ThemeProvider } from "./lib/ThemeProvider";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
-// Force dark mode as the initial theme
-if (typeof window !== "undefined") {
-  localStorage.setItem("theme", "dark");
-  document.documentElement.classList.remove("light");
-  document.documentElement.classList.add("dark");
-}
+// Remove the code that forces dark mode
+// Now the system will use the ThemeProvider's default behavior
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="dark">
+    <ThemeProvider defaultTheme="system">
       <TooltipProvider>
         <Toaster />
         <BrowserRouter>

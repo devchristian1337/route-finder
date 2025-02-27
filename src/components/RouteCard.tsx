@@ -1,4 +1,3 @@
-// @ts-expect-error - Ignoring TypeScript errors as they don't affect functionality
 import React, { useState } from "react";
 import { ExternalLink, Copy, Check, Globe } from "lucide-react";
 import { toast } from "sonner";

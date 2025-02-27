@@ -1,4 +1,3 @@
-// @ts-expect-error - Ignoring TypeScript errors as they don't affect functionality
 import React, { useState, useEffect } from "react";
 import { useRouteStore } from "../store/routeStore";
 import RouteCard from "./RouteCard";
