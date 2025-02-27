@@ -1,12 +1,13 @@
-
-import { create } from 'zustand';
-import axios from 'axios';
-import { toast } from 'sonner';
+import { create } from "zustand";
+import { toast } from "sonner";
+import { fetchRoutesViaGoogleSearch } from "../utils/api";
 
 interface Route {
   path: string;
   url: string;
   isExternal?: boolean;
+  title?: string;
+  description?: string;
 }
 
 interface RouteState {
@@ -15,79 +16,86 @@ interface RouteState {
   isLoading: boolean;
   error: string | null;
   setUrl: (url: string) => void;
-  fetchRoutes: () => Promise<void>;
+  fetchRoutes: (numResults?: number) => Promise<void>;
   resetState: () => void;
 }
 
 export const useRouteStore = create<RouteState>((set, get) => ({
-  url: '',
+  url: "",
   routes: [],
   isLoading: false,
   error: null,
-  
+
   setUrl: (url) => set({ url }),
-  
-  fetchRoutes: async () => {
+
+  fetchRoutes: async (numResults = 30) => {
     const { url } = get();
-    
+
     // Validate URL
     if (!url) {
-      toast.error('Please enter a URL');
+      toast.error("Please enter a URL");
       return;
     }
-    
+
     try {
-      const validatedUrl = url.startsWith('http') ? url : `https://${url}`;
-      
-      set({ isLoading: true, error: null });
-      toast.info('Fetching routes...');
-      
-      // In a real app, this would call ScrapingBee API
-      // For now we'll simulate an API call with a timeout
-      setTimeout(async () => {
-        try {
-          // Normally you would use the ScrapingBee API here
-          // const response = await axios.post('https://app.scrapingbee.com/api/v1', { 
-          //   url: validatedUrl,
-          //   api_key: 'your-api-key' 
-          // });
-          
-          // For the demo, we'll simulate a response:
-          console.log(`Fetching routes for: ${validatedUrl}`);
-          
-          // Create some mock routes
-          const domain = new URL(validatedUrl).hostname;
-          const mockRoutes: Route[] = [
-            { path: '/', url: `https://${domain}/` },
-            { path: '/about', url: `https://${domain}/about` },
-            { path: '/products', url: `https://${domain}/products` },
-            { path: '/services', url: `https://${domain}/services` },
-            { path: '/contact', url: `https://${domain}/contact` },
-            { path: '/blog', url: `https://${domain}/blog` },
-            { path: '/blog/post-1', url: `https://${domain}/blog/post-1` },
-            { path: '/blog/post-2', url: `https://${domain}/blog/post-2` },
-            { path: '/blog/post-3', url: `https://${domain}/blog/post-3` },
-            { path: '/faq', url: `https://${domain}/faq` },
-            { path: '/pricing', url: `https://${domain}/pricing` },
-            { path: '/terms', url: `https://${domain}/terms` },
-            { path: '/privacy', url: `https://${domain}/privacy` },
-          ];
-          
-          set({ routes: mockRoutes, isLoading: false });
-          toast.success(`Found ${mockRoutes.length} routes`);
-        } catch (error) {
-          console.error('Error fetching routes:', error);
-          set({ error: 'Failed to fetch routes. Please try again.', isLoading: false });
-          toast.error('Failed to fetch routes');
-        }
-      }, 2000); // Simulate network delay
-      
+      // Basic URL validation - make sure we have a valid URL with proper protocol
+      let validatedUrl = url.trim();
+
+      // If URL doesn't start with http or https, add https://
+      if (!validatedUrl.match(/^https?:\/\//i)) {
+        validatedUrl = `https://${validatedUrl}`;
+      }
+
+      set({ isLoading: true, error: null, routes: [] });
+
+      // Get API key from environment variable
+      const apiKey = import.meta.env.VITE_SCRAPINGBEE_API_KEY;
+
+      if (!apiKey) {
+        throw new Error(
+          "ScrapingBee API key is missing. Please add it to your .env file."
+        );
+      }
+
+      // Always use Google Search API
+      toast.info(
+        `Discovering routes via Google Search (${numResults} results)...`
+      );
+      console.log(
+        `Fetching routes via Google Search for: ${validatedUrl} with ${numResults} results`
+      );
+
+      const response = await fetchRoutesViaGoogleSearch({
+        apiKey,
+        domain: validatedUrl,
+        numResults, // Use the provided numResults parameter
+        language: "en",
+      });
+
+      if (!response.success) {
+        throw new Error(
+          response.error || "Failed to fetch data from Google Search"
+        );
+      }
+
+      const { routes } = response.data;
+
+      if (!routes || !Array.isArray(routes) || routes.length === 0) {
+        throw new Error("No routes were found via Google Search");
+      }
+
+      console.log(`Found ${routes.length} routes via Google Search`);
+      set({ routes, isLoading: false });
+      toast.success(`Found ${routes.length} routes`);
     } catch (error) {
-      console.error('Error processing URL:', error);
-      set({ error: 'Invalid URL format', isLoading: false });
-      toast.error('Invalid URL format');
+      console.error("Error fetching routes:", error);
+      set({
+        error: error.message || "Failed to fetch routes. Please try again.",
+        isLoading: false,
+      });
+      toast.error(error.message || "Failed to fetch routes");
     }
   },
-  
-  resetState: () => set({ routes: [], error: null })
+
+  resetState: () => set({ routes: [], error: null }),
 }));

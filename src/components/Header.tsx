@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { Compass } from 'lucide-react';
+import React from "react";
+import { Compass } from "lucide-react";
 
 const Header = () => {
   return (
@@ -13,7 +12,7 @@ const Header = () => {
           </h1>
         </div>
         <div className="text-center">
-          <div className="inline-flex px-3 py-1 rounded-full bg-secondary text-xs font-medium text-secondary-foreground mb-2">
+          <div className="inline-flex px-3 py-1 rounded-full bg-secondary text-xs font-medium text-secondary-foreground mb-2 select-none">
             Discover • Map • Navigate
           </div>
           <p className="text-muted-foreground text-sm max-w-md mx-auto px-4">

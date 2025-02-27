@@ -1,69 +1,73 @@
-# Welcome to your Lovable project
+# Route Finder
 
-## Project info
+A web application that discovers routes and pages for any website using either direct scraping or Google Search API.
 
-**URL**: https://lovable.dev/projects/e0b387cc-ad40-4ecf-9651-180236304c87
+## Features
 
-## How can I edit this code?
+- **Two Discovery Methods**:
 
-There are several ways of editing your application.
+  - **Google Search API** - Uses Google's index to find routes and pages for a specific domain.
+  - **Direct Scraping** - Extracts links directly from the rendered HTML of a webpage.
 
-**Use Lovable**
+- **Rich Route Information**:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e0b387cc-ad40-4ecf-9651-180236304c87) and start prompting.
+  - Page titles and descriptions (when using Google Search)
+  - Path information and URLs
+  - External link detection
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Modern UI**:
+  - Clean, responsive interface
+  - Animation effects for a smooth user experience
+  - Loading states and error handling
 
-**Use your preferred IDE**
+## Getting Started
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1. Clone this repository
+2. Install dependencies: `npm install` or `yarn`
+3. Add your ScrapingBee API key to a `.env` file:
+   ```
+   VITE_SCRAPINGBEE_API_KEY=your_api_key_here
+   ```
+4. Start the development server: `npm run dev` or `yarn dev`
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Google Search Integration
 
-Follow these steps:
+The application uses ScrapingBee's Google Search API to discover routes for a website. To use this feature:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+1. Enter a website URL in the input field
+2. Make sure "Use Google Search API" is toggled on
+3. Click "Find Routes"
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+This will search Google for all indexed pages on that domain and display them as routes, including their titles and descriptions.
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Example API Request
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+curl https://app.scrapingbee.com/api/v1/store/google?api_key=YOUR_API_KEY&search=site%3Aexample.com&language=en&nb_results=10
 ```
 
-**Edit a file directly in GitHub**
+This will return a JSON response with Google search results for the domain "example.com".
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Using Direct Scraping
 
-**Use GitHub Codespaces**
+If you prefer to scrape links directly from a website:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+1. Enter a website URL in the input field
+2. Toggle off "Use Google Search API"
+3. Click "Find Routes"
 
-## What technologies are used for this project?
+This method works best for websites with simple structures and plenty of internal links on the homepage.
 
-This project is built with .
+## Technologies
 
-- Vite
-- TypeScript
 - React
-- shadcn-ui
-- Tailwind CSS
+- TypeScript
+- TailwindCSS
+- Zustand for state management
+- ScrapingBee API
 
-## How can I deploy this project?
+## Development Notes
 
-Simply open [Lovable](https://lovable.dev/projects/e0b387cc-ad40-4ecf-9651-180236304c87) and click on Share -> Publish.
+The Google Search API provides more comprehensive results but is limited to pages that Google has indexed. Direct scraping can find unindexed pages but only discovers links present on the specific page being scraped.
 
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+For best results, try both methods and compare the results.
