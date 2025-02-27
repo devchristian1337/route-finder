@@ -194,7 +194,7 @@ const UrlInput = () => {
           <Button
             type="submit"
             disabled={isLoading || !url.trim()}
-            className="h-12 sm:rounded-l-none rounded-t-none sm:rounded-t-xl w-full sm:w-auto px-5 transition-all duration-300"
+            className="h-12 rounded-xl rounded-t-none sm:rounded-xl w-full sm:w-auto px-5 transition-all duration-300"
             aria-label={isLoading ? "Scanning routes" : "Find routes"}
           >
             {isLoading ? (
