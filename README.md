@@ -1,73 +1,120 @@
-# Route Finder
+## RouteFinder
 
-A web application that discovers routes and pages for any website using either direct scraping or Google Search API.
+![RouteFinder Preview](https://iili.io/3d71X3J.png)
+
+RouteFinder is a web-based tool that helps you discover and map all accessible routes on a website. It utilizes Google Search to find indexed pages on a domain, providing a comprehensive view of a website's structure. This can be particularly useful for:
+
+- Website auditing and SEO analysis
+- Content discovery and mapping
+- Finding hidden or forgotten pages
+- Understanding website architecture
+- Analyzing site structure for optimization
 
 ## Features
 
-- **Two Discovery Methods**:
+- **Simple URL Input**: Enter any website URL to begin scanning
+- **Adjustable Results**: Control how many pages to discover (1-100)
+- **Clean Interface**: Modern, responsive UI built with React and Tailwind CSS
+- **Route Details**: View paths, titles, and descriptions for each discovered route
+- **External Link Detection**: Automatically identifies and marks external links
+- **Real-time Feedback**: Loading indicators and toast notifications
+- **Error Handling**: Graceful error handling with helpful messages
 
-  - **Google Search API** - Uses Google's index to find routes and pages for a specific domain.
-  - **Direct Scraping** - Extracts links directly from the rendered HTML of a webpage.
+## Tech Stack
 
-- **Rich Route Information**:
-
-  - Page titles and descriptions (when using Google Search)
-  - Path information and URLs
-  - External link detection
-
-- **Modern UI**:
-  - Clean, responsive interface
-  - Animation effects for a smooth user experience
-  - Loading states and error handling
+- **Frontend**: React 19 with TypeScript
+- **Routing**: React Router v7
+- **State Management**: Zustand
+- **API Integration**: Axios
+- **UI Components**: Shadcn UI (Radix UI primitives)
+- **Styling**: Tailwind CSS
+- **Build Tool**: Vite
+- **Data Fetching**: TanStack Query (React Query)
+- **External API**: ScrapingBee (for Google Search)
 
 ## Getting Started
 
-1. Clone this repository
-2. Install dependencies: `npm install` or `yarn`
-3. Add your ScrapingBee API key to a `.env` file:
+### Prerequisites
+
+- Node.js (v18+)
+- npm or yarn
+- ScrapingBee API key ([Get one here](https://www.scrapingbee.com/))
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/route-finder.git
+   cd route-finder
    ```
-   VITE_SCRAPINGBEE_API_KEY=your_api_key_here
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   # or
+   yarn install
    ```
-4. Start the development server: `npm run dev` or `yarn dev`
 
-## Google Search Integration
+3. Create a `.env` file in the root directory based on `.env.example`:
 
-The application uses ScrapingBee's Google Search API to discover routes for a website. To use this feature:
+   ```
+   VITE_SCRAPINGBEE_API_KEY=your_scrapingbee_api_key_here
+   ```
 
-1. Enter a website URL in the input field
-2. Make sure "Use Google Search API" is toggled on
-3. Click "Find Routes"
+4. Start the development server:
 
-This will search Google for all indexed pages on that domain and display them as routes, including their titles and descriptions.
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-### Example API Request
+5. Open your browser and navigate to `http://localhost:5173`
 
+### Building for Production
+
+```bash
+npm run build
+# or
+yarn build
 ```
-curl https://app.scrapingbee.com/api/v1/store/google?api_key=YOUR_API_KEY&search=site%3Aexample.com&language=en&nb_results=10
-```
 
-This will return a JSON response with Google search results for the domain "example.com".
+## Usage
 
-## Using Direct Scraping
+1. Enter a website URL in the input field (e.g., example.com)
+2. Use the slider to set the maximum number of results (default: 30)
+3. Click "Find Routes" to begin scanning
+4. View the discovered routes with their paths and details
+5. Click on any route to visit that page
 
-If you prefer to scrape links directly from a website:
+## How It Works
 
-1. Enter a website URL in the input field
-2. Toggle off "Use Google Search API"
-3. Click "Find Routes"
+RouteFinder uses the ScrapingBee API to perform Google Search queries with the `site:` operator. This discovers all indexed pages on the specified domain. The application processes these results to extract paths, titles, and descriptions, then presents them in an organized and user-friendly interface.
 
-This method works best for websites with simple structures and plenty of internal links on the homepage.
+## Environment Variables
 
-## Technologies
+| Variable                 | Description              | Required |
+| ------------------------ | ------------------------ | -------- |
+| VITE_SCRAPINGBEE_API_KEY | Your ScrapingBee API key | Yes      |
 
-- React
-- TypeScript
-- TailwindCSS
-- Zustand for state management
-- ScrapingBee API
+## Troubleshooting
 
-## Development Notes
+### API Key Issues
 
-The Google Search API provides more comprehensive results but is limited to pages that Google has indexed. Direct scraping can find unindexed pages but only discovers links present on the specific page being scraped.
+- **Error: "ScrapingBee API key is missing"** - Ensure you've created a `.env` file with your API key as shown in the installation steps.
+- **Error: "Failed to fetch data from Google Search"** - Verify your API key is valid and has enough credits. Check the [ScrapingBee dashboard](https://app.scrapingbee.com/account/usage) for usage information.
 
-For best results, try both methods and compare the results.
+### Rate Limiting
+
+- If you're experiencing rate limiting, try reducing the maximum number of results requested or wait a few minutes before trying again.
+
+### No Routes Found
+
+- Some websites may block scraping or have robots.txt rules preventing indexing. Try another website or reduce the number of results.
+- Ensure the URL is correctly formatted. If unsure, include the full URL with `https://` prefix.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
