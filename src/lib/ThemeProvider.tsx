@@ -121,9 +121,11 @@ const initializeTheme = (forceReset: boolean = false) => {
 };
 
 // Run the initialization immediately on the client side
-// Don't force reset to system theme on initial load (changed from true to false)
+// Force reset to system theme on initial load when no localStorage theme is present
 const initialTheme =
-  typeof window !== "undefined" ? initializeTheme(false) : "system";
+  typeof window !== "undefined"
+    ? initializeTheme(getStoredTheme() === null)
+    : "system";
 
 export function ThemeProvider({
   children,
@@ -148,6 +150,7 @@ export function ThemeProvider({
       return storedTheme;
     }
 
+    // If no stored theme is found, use the default theme from props
     return defaultTheme;
   });
 
