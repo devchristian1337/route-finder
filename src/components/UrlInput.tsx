@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Search, ArrowRight, SlidersHorizontal } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Search, ArrowRight, SlidersHorizontal, X } from "lucide-react";
 import { useRouteStore } from "../store/routeStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,9 +21,17 @@ const UrlInput = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [resultsCount, setResultsCount] = useState(30);
   const [isResultsPopoverOpen, setIsResultsPopoverOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(e.target.value);
+  };
+
+  const handleClearInput = () => {
+    setUrl("");
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
   };
 
   const handleResultsCountChange = (value: number[]) => {
@@ -69,7 +77,7 @@ const UrlInput = () => {
               />
             </div>
 
-            <div className="flex-grow">
+            <div className="flex-grow relative">
               <Input
                 type="url"
                 value={url}
@@ -83,7 +91,22 @@ const UrlInput = () => {
                 aria-label="Website URL"
                 spellCheck={false}
                 autoComplete="url"
+                ref={inputRef}
               />
+              {url.trim() && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleClearInput}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 p-0 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  disabled={isLoading}
+                  aria-label="Clear input"
+                  tabIndex={0}
+                >
+                  <X size={16} />
+                </Button>
+              )}
             </div>
 
             {/* Results Count Popover */}
