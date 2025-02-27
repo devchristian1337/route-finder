@@ -19,6 +19,10 @@ RouteFinder is a web-based tool that helps you discover and map all accessible r
 - **External Link Detection**: Automatically identifies and marks external links
 - **Real-time Feedback**: Loading indicators and toast notifications
 - **Error Handling**: Graceful error handling with helpful messages
+- **Pagination**: Navigate through large sets of discovered routes easily
+- **Theme Switching**: Toggle between light and dark modes
+- **Mobile Responsive**: Works on devices of all sizes
+- **Direct Site Access**: Open discovered routes in a new tab with one click
 
 ## Tech Stack
 
@@ -31,6 +35,8 @@ RouteFinder is a web-based tool that helps you discover and map all accessible r
 - **Build Tool**: Vite
 - **Data Fetching**: TanStack Query (React Query)
 - **External API**: ScrapingBee (for Google Search)
+- **Toast Notifications**: Sonner
+- **Animations**: Framer Motion
 
 ## Getting Started
 
@@ -88,6 +94,8 @@ yarn build
 3. Click "Find Routes" to begin scanning
 4. View the discovered routes with their paths and details
 5. Click on any route to visit that page
+6. Use the pagination controls to navigate through larger sets of results
+7. Toggle between light and dark themes using the theme switcher
 
 ## How It Works
 
@@ -109,11 +117,18 @@ RouteFinder uses the ScrapingBee API to perform Google Search queries with the `
 ### Rate Limiting
 
 - If you're experiencing rate limiting, try reducing the maximum number of results requested or wait a few minutes before trying again.
+- ScrapingBee has API usage limits based on your plan. Check your account for remaining credits.
 
 ### No Routes Found
 
 - Some websites may block scraping or have robots.txt rules preventing indexing. Try another website or reduce the number of results.
 - Ensure the URL is correctly formatted. If unsure, include the full URL with `https://` prefix.
+- Websites that are very new or not well-indexed by Google may return few or no results.
+
+### Browser Compatibility
+
+- RouteFinder works best on modern browsers like Chrome, Firefox, Safari, and Edge.
+- If experiencing display issues, try clearing your browser cache or using a different browser.
 
 ## Contributing
 
