@@ -5,6 +5,7 @@ import LoadingState from "./LoadingState";
 import { ExternalLink, AlertCircle, Compass, Download } from "lucide-react";
 import { LinkPreview } from "./ui/link-preview";
 import { toast } from "sonner";
+import { AnimatedText } from "./ui/animated-shiny-text";
 import {
   Pagination,
   PaginationContent,
@@ -18,7 +19,7 @@ import {
 const ROUTES_PER_PAGE = 10;
 
 const RouteList = () => {
-  const { routes, isLoading, error, url } = useRouteStore();
+  const { routes, isLoading, error, url, hasSearched } = useRouteStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -123,7 +124,7 @@ const RouteList = () => {
     );
   }
 
-  if (routes.length === 0 && url) {
+  if (routes.length === 0 && url && hasSearched) {
     return (
       <div className="flex flex-col items-center justify-center py-16 animate-fade-in">
         <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
@@ -133,6 +134,22 @@ const RouteList = () => {
         <p className="text-muted-foreground text-center max-w-md mt-2">
           We couldn't find any routes for the provided URL. Please verify the
           URL is correct and try again.
+          {url && (
+            <span className="block mt-2 text-center">
+              URL:
+              <AnimatedText
+                text={
+                  new URL(url.startsWith("http") ? url : `https://${url}`)
+                    .hostname
+                }
+                gradientColors="linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6)"
+                gradientAnimationDuration={3}
+                className="py-0 inline-flex ml-1"
+                textClassName="text-sm font-medium"
+                preserveDefaultSize={false}
+              />
+            </span>
+          )}
         </p>
       </div>
     );
@@ -151,7 +168,26 @@ const RouteList = () => {
           <h2 className="text-xl font-medium">Discovered Routes</h2>
           <p className="text-sm text-muted-foreground mt-1">
             Found {routes.length} routes on{" "}
-            {new URL(routes[0]?.url || "").hostname}{" "}
+            {routes.length > 0 && (
+              <span className="inline-flex items-center">
+                <AnimatedText
+                  text={new URL(routes[0]?.url || "").hostname}
+                  gradientColors="linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6)"
+                  gradientAnimationDuration={3}
+                  className="py-0 inline-flex"
+                  textClassName="text-sm font-medium"
+                  preserveDefaultSize={false}
+                />
+              </span>
+            )}
+            {routes.length === 0 && url && (
+              <span>
+                {
+                  new URL(url.startsWith("http") ? url : `https://${url}`)
+                    .hostname
+                }
+              </span>
+            )}{" "}
             {routes.length > ROUTES_PER_PAGE &&
               `(showing ${(currentPage - 1) * ROUTES_PER_PAGE + 1}-${Math.min(
                 currentPage * ROUTES_PER_PAGE,

@@ -15,6 +15,7 @@ interface RouteState {
   routes: Route[];
   isLoading: boolean;
   error: string | null;
+  hasSearched: boolean;
   setUrl: (url: string) => void;
   fetchRoutes: (numResults?: number) => Promise<void>;
   resetState: () => void;
@@ -25,6 +26,7 @@ export const useRouteStore = create<RouteState>((set, get) => ({
   routes: [],
   isLoading: false,
   error: null,
+  hasSearched: false,
 
   setUrl: (url) => set({ url }),
 
@@ -56,7 +58,7 @@ export const useRouteStore = create<RouteState>((set, get) => ({
       }
 
       // Set loading state
-      set({ isLoading: true, error: null, routes: [] });
+      set({ isLoading: true, error: null, routes: [], hasSearched: true });
 
       const response = await fetchRoutesViaGoogleSearch({
         apiKey,
@@ -89,5 +91,5 @@ export const useRouteStore = create<RouteState>((set, get) => ({
     }
   },
 
-  resetState: () => set({ routes: [], error: null }),
+  resetState: () => set({ routes: [], error: null, hasSearched: false }),
 }));
