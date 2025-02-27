@@ -30,9 +30,7 @@ const UrlInput = () => {
   const handleClearInput = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
     setUrl("");
-
     inputRef.current?.focus();
   };
 
@@ -78,33 +76,47 @@ const UrlInput = () => {
           } rounded-xl overflow-hidden flex flex-col sm:flex-row border border-slate-200 dark:border-slate-800`}
         >
           {/* Input Container - Full width on mobile, flex row on desktop */}
-          <div className="flex items-center w-full">
+          <div className="flex items-center w-full min-w-0">
             <div className="flex items-center justify-center pl-4">
               <Search
                 size={20}
-                className={`transition-colors duration-300 ${
+                className={`transition-colors duration-300 flex-shrink-0 ${
                   isFocused ? "text-primary" : "text-muted-foreground"
                 }`}
                 aria-hidden="true"
               />
             </div>
 
-            <div className="flex-grow relative">
-              <Input
-                type="url"
-                value={url}
-                onChange={handleInputChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                onKeyDown={handleKeyDown}
-                placeholder="Enter website URL (e.g., example.com)"
-                className="h-12 border-0 bg-transparent focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base placeholder:text-muted-foreground/70"
-                disabled={isLoading}
-                aria-label="Website URL"
-                spellCheck={false}
-                autoComplete="url"
-                ref={inputRef}
-              />
+            <div className="flex-grow relative min-w-0">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="w-full">
+                      <Input
+                        type="url"
+                        value={url}
+                        onChange={handleInputChange}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Enter website URL (e.g., example.com)"
+                        className="h-12 border-0 bg-transparent focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base placeholder:text-muted-foreground/70 truncate pr-8"
+                        disabled={isLoading}
+                        aria-label="Website URL"
+                        spellCheck={false}
+                        autoComplete="url"
+                        ref={inputRef}
+                      />
+                    </div>
+                  </TooltipTrigger>
+                  {url && (
+                    <TooltipContent side="bottom" className="max-w-[300px]">
+                      <p className="text-sm break-all">{url}</p>
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              </TooltipProvider>
+
               {url.trim() && isFocused && (
                 <Button
                   type="button"
@@ -124,7 +136,7 @@ const UrlInput = () => {
             </div>
 
             {/* Results Count Popover - Visible on all screen sizes */}
-            <div className="flex items-center mr-2 border-l border-input/50 pl-3">
+            <div className="flex items-center mr-2 border-l border-input/50 pl-3 flex-shrink-0">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
