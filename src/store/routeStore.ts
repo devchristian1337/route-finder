@@ -46,8 +46,6 @@ export const useRouteStore = create<RouteState>((set, get) => ({
         validatedUrl = `https://${validatedUrl}`;
       }
 
-      set({ isLoading: true, error: null, routes: [] });
-
       // Get API key from environment variable
       const apiKey = import.meta.env.VITE_SCRAPINGBEE_API_KEY;
 
@@ -57,10 +55,9 @@ export const useRouteStore = create<RouteState>((set, get) => ({
         );
       }
 
-      // Always use Google Search API
-      toast.info(
-        `Discovering routes via Google Search (${numResults} results)...`
-      );
+      // Set loading state
+      set({ isLoading: true, error: null, routes: [] });
+
       console.log(
         `Fetching routes via Google Search for: ${validatedUrl} with ${numResults} results`
       );
@@ -77,6 +74,11 @@ export const useRouteStore = create<RouteState>((set, get) => ({
           response.error || "Failed to fetch data from Google Search"
         );
       }
+
+      // Only show the info toast after we confirmed the API call is successful
+      toast.info(
+        `Discovered routes via Google Search (${numResults} results)...`
+      );
 
       const { routes } = response.data;
 

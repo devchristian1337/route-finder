@@ -93,7 +93,7 @@ const UrlInput = () => {
                 autoComplete="url"
                 ref={inputRef}
               />
-              {url.trim() && (
+              {url.trim() && isFocused && (
                 <Button
                   type="button"
                   variant="ghost"

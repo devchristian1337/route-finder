@@ -121,10 +121,22 @@ export const fetchRoutesViaGoogleSearch = async (
         statusText: error.response.statusText,
         data: error.response.data,
       });
+
+      // Check for authentication/API key errors
+      if (error.response.status === 401 || error.response.status === 403) {
+        return {
+          success: false,
+          error:
+            "Invalid or expired ScrapingBee API key. Please check your API key and try again.",
+          isApiKeyError: true,
+        };
+      }
     }
+
     return {
       success: false,
       error: error.message || "Failed to fetch data from Google Search",
+      isApiKeyError: error.message?.toLowerCase().includes("api key"),
     };
   }
 };
