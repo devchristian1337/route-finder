@@ -27,11 +27,13 @@ const UrlInput = () => {
     setUrl(e.target.value);
   };
 
-  const handleClearInput = () => {
+  const handleClearInput = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     setUrl("");
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
+
+    inputRef.current?.focus();
   };
 
   const handleResultsCountChange = (value: number[]) => {
@@ -40,7 +42,16 @@ const UrlInput = () => {
 
   const handleFocus = () => setIsFocused(true);
 
-  const handleBlur = () => setIsFocused(false);
+  const handleBlur = (e: React.FocusEvent) => {
+    if (
+      e.relatedTarget &&
+      (e.relatedTarget as HTMLElement).getAttribute("data-clear-button") ===
+        "true"
+    ) {
+      return;
+    }
+    setIsFocused(false);
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -103,6 +114,8 @@ const UrlInput = () => {
                   disabled={isLoading}
                   aria-label="Clear input"
                   tabIndex={0}
+                  data-clear-button="true"
+                  onMouseDown={(e) => e.preventDefault()}
                 >
                   <X size={16} />
                 </Button>
