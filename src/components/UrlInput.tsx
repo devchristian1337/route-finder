@@ -75,8 +75,9 @@ const UrlInput = () => {
         <div
           className={`relative ${
             isFocused ? "glass-card shadow-lg" : "glass-card shadow-md"
-          } rounded-xl overflow-hidden`}
+          } rounded-xl overflow-hidden flex flex-col sm:flex-row`}
         >
+          {/* Input Container - Full width on mobile, flex row on desktop */}
           <div className="flex items-center w-full">
             <div className="flex items-center justify-center pl-4">
               <Search
@@ -122,7 +123,7 @@ const UrlInput = () => {
               )}
             </div>
 
-            {/* Results Count Popover */}
+            {/* Results Count Popover - Visible on all screen sizes */}
             <div className="flex items-center mr-2 border-l border-input/50 pl-3">
               <TooltipProvider>
                 <Tooltip>
@@ -187,29 +188,30 @@ const UrlInput = () => {
                 </Tooltip>
               </TooltipProvider>
             </div>
-
-            <Button
-              type="submit"
-              disabled={isLoading || !url.trim()}
-              className="h-12 rounded-l-none px-5 transition-all duration-300"
-              aria-label={isLoading ? "Scanning routes" : "Find routes"}
-            >
-              {isLoading ? (
-                <div className="flex items-center gap-2">
-                  <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
-                  <span className="font-medium">Scanning</span>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">Find Routes</span>
-                  <ArrowRight
-                    size={18}
-                    className="transition-transform group-hover:translate-x-1"
-                  />
-                </div>
-              )}
-            </Button>
           </div>
+
+          {/* Submit Button - Full width on mobile, normal on desktop */}
+          <Button
+            type="submit"
+            disabled={isLoading || !url.trim()}
+            className="h-12 sm:rounded-l-none rounded-t-none sm:rounded-t-xl w-full sm:w-auto px-5 transition-all duration-300"
+            aria-label={isLoading ? "Scanning routes" : "Find routes"}
+          >
+            {isLoading ? (
+              <div className="flex items-center gap-2">
+                <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
+                <span className="font-medium">Scanning</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Find Routes</span>
+                <ArrowRight
+                  size={18}
+                  className="transition-transform group-hover:translate-x-1"
+                />
+              </div>
+            )}
+          </Button>
         </div>
       </form>
 
