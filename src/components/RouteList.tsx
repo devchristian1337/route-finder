@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useRouteStore } from "../store/routeStore";
 import RouteCard from "./RouteCard";
 import LoadingState from "./LoadingState";
-import { ExternalLink, AlertCircle, Compass } from "lucide-react";
+import { ExternalLink, AlertCircle, Compass, Download } from "lucide-react";
 import { LinkPreview } from "./ui/link-preview";
+import { toast } from "sonner";
 import {
   Pagination,
   PaginationContent,
@@ -39,6 +40,62 @@ const RouteList = () => {
       setCurrentPage(page);
       // Scroll to top of route list
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  // Function to handle downloading all routes as a text file
+  const handleDownloadRoutes = () => {
+    if (!routes.length) {
+      toast.error("No routes available to download");
+      return;
+    }
+
+    try {
+      // Format the routes data in a structured way
+      const hostname = new URL(routes[0]?.url || "").hostname;
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const filename = `routes-${hostname}-${timestamp}.txt`;
+
+      // Create the content with a header
+      let content = `# Routes for ${hostname}\n`;
+      content += `# Exported on ${new Date().toLocaleString()}\n`;
+      content += `# Total routes: ${routes.length}\n\n`;
+
+      // Add each route with its details
+      routes.forEach((route, index) => {
+        content += `[${index + 1}] ${route.path}\n`;
+        content += `URL: ${route.url}\n`;
+
+        if (route.title) {
+          content += `Title: ${route.title}\n`;
+        }
+
+        if (route.description) {
+          content += `Description: ${route.description}\n`;
+        }
+
+        content += `\n`; // Add a blank line between routes
+      });
+
+      // Create a blob and download link
+      const blob = new Blob([content], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      // Set up and trigger the download
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toast.success(`Downloaded ${routes.length} routes to ${filename}`);
+    } catch (error) {
+      console.error("Error downloading routes:", error);
+      toast.error("Failed to download routes");
     }
   };
 
@@ -89,7 +146,7 @@ const RouteList = () => {
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-6">
         <div>
           <h2 className="text-xl font-medium">Discovered Routes</h2>
           <p className="text-sm text-muted-foreground mt-1">
@@ -102,22 +159,33 @@ const RouteList = () => {
               )})`}
           </p>
         </div>
-        <LinkPreview
-          url={url.startsWith("http") ? url : `https://${url}`}
-          width={400}
-          height={250}
-          quality={80}
-        >
-          <a
-            href={url.startsWith("http") ? url : `https://${url}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm flex items-center gap-1 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <button
+            onClick={handleDownloadRoutes}
+            className="flex-1 sm:flex-initial text-sm flex items-center justify-center gap-1 px-3 py-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            aria-label="Download all routes"
           >
-            <span>Visit Site</span>
-            <ExternalLink size={14} />
-          </a>
-        </LinkPreview>
+            <span>Download All</span>
+            <Download size={14} />
+          </button>
+          <LinkPreview
+            url={url.startsWith("http") ? url : `https://${url}`}
+            width={400}
+            height={250}
+            quality={80}
+            className="flex-1 sm:flex-initial"
+          >
+            <a
+              href={url.startsWith("http") ? url : `https://${url}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 sm:flex-initial text-sm flex items-center justify-center gap-1 px-3 py-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors w-full"
+            >
+              <span>Visit Site</span>
+              <ExternalLink size={14} />
+            </a>
+          </LinkPreview>
+        </div>
       </div>
 
       <div className="grid gap-3">
