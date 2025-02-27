@@ -1,13 +1,80 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header";
 import UrlInput from "../components/UrlInput";
 import RouteList from "../components/RouteList";
+import { useTheme } from "../lib/ThemeProvider";
 
 const Index = () => {
+  const { theme, setTheme } = useTheme();
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleTheme();
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gradient-subtle from-background via-white to-background">
+    <div className="min-h-screen flex flex-col items-center bg-gradient-subtle from-background via-white to-background dark:from-background dark:via-background/90 dark:to-background">
+      <div className="fixed top-4 right-4 z-50">
+        <button
+          onClick={toggleTheme}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+          className="p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 transform hover:scale-105 active:scale-95 transition-all shadow-md"
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+        >
+          {theme === "dark" ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-amber-500"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-indigo-600"
+            >
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          )}
+        </button>
+      </div>
+
       <div className="w-full max-w-5xl mx-auto pt-12 md:pt-20 px-4 space-y-10 flex-grow">
-        <Header />
+        <div className="flex justify-between items-center">
+          <Header />
+        </div>
         <UrlInput />
         <RouteList />
       </div>
