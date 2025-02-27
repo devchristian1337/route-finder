@@ -208,6 +208,8 @@ const extractRoutesFromGoogleResults = (
 };
 
 // For legacy support, we still export these functions but they're not used anymore
+// Removing unused exports per knip report
+/* 
 export const fetchRoutes = async (config: ScrapingBeeConfig) => {
   console.warn("fetchRoutes is deprecated - using Google Search API instead");
   const { apiKey, url } = config;
@@ -237,3 +239,4 @@ export const processRoutesFromLinks = (
   );
   return [];
 };
+*/

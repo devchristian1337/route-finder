@@ -34,7 +34,6 @@ const getSystemTheme = (): "dark" | "light" => {
 const clearStoredTheme = () => {
   if (typeof window === "undefined") return;
   try {
-    console.log("Clearing theme from localStorage");
     localStorage.removeItem("theme");
   } catch (e) {
     console.error("Failed to clear theme from localStorage:", e);
@@ -54,11 +53,9 @@ const getStoredTheme = (): Theme | null => {
       storedTheme === "light" ||
       storedTheme === "system"
     ) {
-      console.log("Retrieved stored theme:", storedTheme);
       return storedTheme;
     }
 
-    console.log("No valid theme found in localStorage");
     return null;
   } catch (e) {
     console.error("Failed to read theme from localStorage:", e);
@@ -71,7 +68,6 @@ const forceSetStoredTheme = (theme: Theme) => {
   if (typeof window === "undefined") return;
 
   try {
-    console.log("Forcing theme in localStorage:", theme);
     localStorage.setItem("theme", theme);
   } catch (e) {
     console.error("Failed to write theme to localStorage:", e);
@@ -88,7 +84,6 @@ const initializeTheme = (forceReset: boolean = false) => {
     // Force reset theme to system if requested
     if (forceReset) {
       clearStoredTheme();
-      console.log("Force reset theme to system");
 
       // Apply system theme to document
       const systemThemeValue = getSystemTheme();
@@ -105,8 +100,6 @@ const initializeTheme = (forceReset: boolean = false) => {
     const storedTheme = getStoredTheme();
     const initialTheme = storedTheme || "system";
 
-    console.log("Initializing with theme:", initialTheme);
-
     // Always save the theme to localStorage
     forceSetStoredTheme(initialTheme);
 
@@ -115,8 +108,6 @@ const initializeTheme = (forceReset: boolean = false) => {
       initialTheme === "system"
         ? getSystemTheme()
         : (initialTheme as "dark" | "light");
-
-    console.log("Resolved display theme:", resolvedTheme);
 
     // Apply theme class to document
     root.classList.remove("light", "dark");
@@ -154,17 +145,14 @@ export function ThemeProvider({
     const storedTheme = getStoredTheme();
 
     if (storedTheme) {
-      console.log("Using stored theme:", storedTheme);
       return storedTheme;
     }
 
-    console.log("Using default theme:", defaultTheme);
     return defaultTheme;
   });
 
   // Function to reset theme to system
   const resetTheme = () => {
-    console.log("Resetting theme to system");
     clearStoredTheme();
     setTheme("system");
   };
@@ -172,8 +160,6 @@ export function ThemeProvider({
   // Apply theme when it changes
   useEffect(() => {
     if (typeof window === "undefined") return;
-
-    console.log("Theme changed to:", theme);
 
     const root = window.document.documentElement;
 
@@ -183,8 +169,6 @@ export function ThemeProvider({
     // Calculate the actual theme to display
     const newResolvedTheme =
       theme === "system" ? getSystemTheme() : (theme as "dark" | "light");
-
-    console.log("Resolved to display:", newResolvedTheme);
 
     // Save theme preference to localStorage
     forceSetStoredTheme(theme);
@@ -201,10 +185,8 @@ export function ThemeProvider({
 
     const handleChange = () => {
       if (theme === "system") {
-        console.log("System theme changed, updating display");
         const root = window.document.documentElement;
         const newResolvedTheme = getSystemTheme();
-        console.log("New system theme:", newResolvedTheme);
 
         root.classList.remove("light", "dark");
         root.classList.add(newResolvedTheme);
@@ -227,7 +209,6 @@ export function ThemeProvider({
   const value = {
     theme,
     setTheme: (newTheme: Theme) => {
-      console.log("Setting theme to:", newTheme);
       setTheme(newTheme);
     },
     resetTheme,

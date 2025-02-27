@@ -22,7 +22,7 @@ const themes = [
   },
 ];
 
-export type ThemeSwitcherProps = {
+type ThemeSwitcherProps = {
   className?: string;
 };
 
@@ -37,11 +37,9 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
     // On mount, update active theme from the ThemeProvider
     setMounted(true);
     setActiveTheme(theme);
-    console.log("ThemeSwitcher mounted with theme:", theme);
   }, [theme]);
 
   const handleThemeChange = (newTheme: "light" | "dark" | "system") => {
-    console.log(`Setting theme to ${newTheme}`);
     setTheme(newTheme);
     setActiveTheme(newTheme);
   };
