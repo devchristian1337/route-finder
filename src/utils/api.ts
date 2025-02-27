@@ -77,9 +77,6 @@ export const fetchRoutesViaGoogleSearch = async (
     // Construct the ScrapingBee Google API URL
     const apiUrl = "https://app.scrapingbee.com/api/v1/store/google";
 
-    // Log the request information
-    console.log(`Searching Google for pages on: ${cleanDomain}`);
-
     // Make the request to ScrapingBee Google Search API
     const response = await axios({
       method: "GET",
@@ -95,13 +92,6 @@ export const fetchRoutesViaGoogleSearch = async (
         "Content-Type": "application/json",
       },
       timeout: 30000,
-    });
-
-    // Log the response summary
-    console.log("Google Search API response:", {
-      status: response.status,
-      resultsCount: response.data?.organic_results?.length || 0,
-      totalFound: response.data?.meta_data?.number_of_results || 0,
     });
 
     // Extract routes from the search results
@@ -199,7 +189,6 @@ const extractRoutesFromGoogleResults = (
       }
     }
 
-    console.log(`Extracted ${routes.length} routes from Google Search results`);
     return routes;
   } catch (error) {
     console.error("Error extracting routes from Google results:", error);

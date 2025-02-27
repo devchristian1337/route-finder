@@ -58,10 +58,6 @@ export const useRouteStore = create<RouteState>((set, get) => ({
       // Set loading state
       set({ isLoading: true, error: null, routes: [] });
 
-      console.log(
-        `Fetching routes via Google Search for: ${validatedUrl} with ${numResults} results`
-      );
-
       const response = await fetchRoutesViaGoogleSearch({
         apiKey,
         domain: validatedUrl,
@@ -81,7 +77,6 @@ export const useRouteStore = create<RouteState>((set, get) => ({
         throw new Error("No routes were found via Google Search");
       }
 
-      console.log(`Found ${routes.length} routes via Google Search`);
       set({ routes, isLoading: false });
       toast.success(`Found ${routes.length} routes`);
     } catch (error) {

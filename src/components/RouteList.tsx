@@ -3,6 +3,7 @@ import { useRouteStore } from "../store/routeStore";
 import RouteCard from "./RouteCard";
 import LoadingState from "./LoadingState";
 import { ExternalLink, AlertCircle, Compass } from "lucide-react";
+import { LinkPreview } from "./ui/link-preview";
 import {
   Pagination,
   PaginationContent,
@@ -101,15 +102,22 @@ const RouteList = () => {
               )})`}
           </p>
         </div>
-        <a
-          href={url.startsWith("http") ? url : `https://${url}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm flex items-center gap-1 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
+        <LinkPreview
+          url={url.startsWith("http") ? url : `https://${url}`}
+          width={400}
+          height={250}
+          quality={80}
         >
-          <span>Visit Site</span>
-          <ExternalLink size={14} />
-        </a>
+          <a
+            href={url.startsWith("http") ? url : `https://${url}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm flex items-center gap-1 px-3 py-1.5 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
+          >
+            <span>Visit Site</span>
+            <ExternalLink size={14} />
+          </a>
+        </LinkPreview>
       </div>
 
       <div className="grid gap-3">

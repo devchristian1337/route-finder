@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ExternalLink, Copy, Check, Globe } from "lucide-react";
 import { toast } from "sonner";
+import { LinkPreview } from "./ui/link-preview";
 
 interface RouteCardProps {
   path: string;
@@ -65,9 +66,14 @@ const RouteCard: React.FC<RouteCardProps> = ({
           {/* Main URL display - emphasized */}
           <div className="flex items-center gap-2">
             <Globe size={16} className="text-primary flex-shrink-0" />
-            <h3 className="font-medium truncate" title={url}>
-              {displayUrl}
-            </h3>
+            <LinkPreview url={url} width={300} height={180} quality={75}>
+              <h3
+                className="font-medium truncate hover:text-primary transition-colors"
+                title={url}
+              >
+                {displayUrl}
+              </h3>
+            </LinkPreview>
           </div>
 
           {/* Title when available */}
