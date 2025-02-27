@@ -2,7 +2,7 @@ import { cn } from "../lib/utils";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { useTheme } from "../lib/ThemeProvider";
+import { useTheme } from "../lib/useTheme";
 
 const themes = [
   {

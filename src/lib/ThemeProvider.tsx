@@ -1,6 +1,9 @@
-import { createContext, useContext, useEffect, useState } from "react";
-
-type Theme = "dark" | "light" | "system";
+import { useEffect, useState } from "react";
+import {
+  Theme,
+  ThemeProviderContext,
+  ThemeProviderState,
+} from "./ThemeContext";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -8,23 +11,9 @@ type ThemeProviderProps = {
   forceReset?: boolean;
 };
 
-type ThemeProviderState = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-  resetTheme: () => void;
-};
-
-const initialState: ThemeProviderState = {
-  theme: "system",
-  setTheme: () => null,
-  resetTheme: () => null,
-};
-
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
-
 // Helper function to get current system theme
 const getSystemTheme = (): "dark" | "light" => {
-  if (typeof window === "undefined") return "light";
+  if (typeof window === "undefined") return "light"; // Default to light during SSR
   return window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
@@ -81,7 +70,7 @@ const initializeTheme = (forceReset: boolean = false) => {
   try {
     const root = window.document.documentElement;
 
-    // Force reset theme to system if requested
+    // Clear localStorage and use system theme if forceReset is true
     if (forceReset) {
       clearStoredTheme();
 
@@ -90,26 +79,21 @@ const initializeTheme = (forceReset: boolean = false) => {
       root.classList.remove("light", "dark");
       root.classList.add(systemThemeValue);
 
-      // Save system theme to localStorage
-      forceSetStoredTheme("system");
-
       return "system";
     }
 
-    // Get theme from localStorage or default to system
+    // Get theme from localStorage or use system as default
     const storedTheme = getStoredTheme();
     const initialTheme = storedTheme || "system";
 
-    // Always save the theme to localStorage
-    forceSetStoredTheme(initialTheme);
+    // Set the theme in localStorage if not already set
+    if (!storedTheme) {
+      forceSetStoredTheme("system");
+    }
 
-    // Apply the actual theme class to the document
+    // Resolve and apply the actual theme class
     const resolvedTheme =
-      initialTheme === "system"
-        ? getSystemTheme()
-        : (initialTheme as "dark" | "light");
-
-    // Apply theme class to document
+      initialTheme === "system" ? getSystemTheme() : initialTheme;
     root.classList.remove("light", "dark");
     root.classList.add(resolvedTheme);
 
@@ -120,37 +104,36 @@ const initializeTheme = (forceReset: boolean = false) => {
   }
 };
 
-// Run the initialization immediately on the client side
-// Force reset to system theme on initial load when no localStorage theme is present
+// This should always run directly when the file is loaded
+// We want to ensure we force reset when localStorage has no theme
 const initialTheme =
-  typeof window !== "undefined"
-    ? initializeTheme(getStoredTheme() === null)
-    : "system";
+  typeof window !== "undefined" ? initializeTheme(!getStoredTheme()) : "system";
 
 export function ThemeProvider({
   children,
   defaultTheme = "system",
   forceReset = false,
 }: ThemeProviderProps) {
-  // Use a function to initialize state with the most accurate theme
+  // Use a function to initialize state with the accurate theme
   const [theme, setTheme] = useState<Theme>(() => {
     // For SSR, use the default theme
     if (typeof window === "undefined") return defaultTheme;
 
-    // If we're forcing a reset, use system theme
+    // Reset to system theme if forceReset is true
     if (forceReset) {
       clearStoredTheme();
       return "system";
     }
 
-    // Get the theme from localStorage if available
+    // Get theme from localStorage if available
     const storedTheme = getStoredTheme();
 
+    // If we have a stored theme, use it
     if (storedTheme) {
       return storedTheme;
     }
 
-    // If no stored theme is found, use the default theme from props
+    // If no stored theme found, use defaultTheme (which should be "system")
     return defaultTheme;
   });
 
@@ -223,12 +206,3 @@ export function ThemeProvider({
     </ThemeProviderContext.Provider>
   );
 }
-
-export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
-
-  if (context === undefined)
-    throw new Error("useTheme must be used within a ThemeProvider");
-
-  return context;
-};

@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../components/Header";
 import UrlInput from "../components/UrlInput";
 import RouteList from "../components/RouteList";
-import { useTheme } from "../lib/ThemeProvider";
+import { useTheme } from "../lib/useTheme";
 import { ThemeSwitcher } from "../components/ThemeSwitcher";
 
 const Index = () => {
