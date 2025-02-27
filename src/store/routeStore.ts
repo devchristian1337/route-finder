@@ -75,11 +75,6 @@ export const useRouteStore = create<RouteState>((set, get) => ({
         );
       }
 
-      // Only show the info toast after we confirmed the API call is successful
-      toast.info(
-        `Discovered routes via Google Search (${numResults} results)...`
-      );
-
       const { routes } = response.data;
 
       if (!routes || !Array.isArray(routes) || routes.length === 0) {
