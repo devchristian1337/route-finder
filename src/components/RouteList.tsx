@@ -36,6 +36,20 @@ const RouteList = () => {
     return routes.slice(startIndex, endIndex);
   };
 
+  // Function to get the hostname without protocol
+  const getHostnameWithoutProtocol = (urlString) => {
+    try {
+      // Add https:// if no protocol is present to make URL parsing work
+      const fullUrl = urlString.startsWith("http")
+        ? urlString
+        : `https://${urlString}`;
+      const hostname = new URL(fullUrl).hostname;
+      return hostname;
+    } catch (error) {
+      return urlString; // Return original string if parsing fails
+    }
+  };
+
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -53,7 +67,7 @@ const RouteList = () => {
 
     try {
       // Format the routes data in a structured way
-      const hostname = new URL(routes[0]?.url || "").hostname;
+      const hostname = getHostnameWithoutProtocol(url);
       const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
       const filename = `routes-${hostname}-${timestamp}.txt`;
 
@@ -80,18 +94,18 @@ const RouteList = () => {
 
       // Create a blob and download link
       const blob = new Blob([content], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
+      const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement("a");
 
       // Set up and trigger the download
-      link.href = url;
+      link.href = downloadUrl;
       link.download = filename;
       document.body.appendChild(link);
       link.click();
 
       // Clean up
       document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      URL.revokeObjectURL(downloadUrl);
 
       toast.success(`Downloaded ${routes.length} routes to ${filename}`);
     } catch (error) {
@@ -138,10 +152,7 @@ const RouteList = () => {
             <span className="block mt-2 text-center">
               URL:
               <AnimatedText
-                text={
-                  new URL(url.startsWith("http") ? url : `https://${url}`)
-                    .hostname
-                }
+                text={getHostnameWithoutProtocol(url)}
                 gradientColors="linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6)"
                 gradientAnimationDuration={3}
                 className="py-0 inline-flex ml-1"
@@ -160,6 +171,7 @@ const RouteList = () => {
   }
 
   const currentRoutes = getCurrentPageRoutes();
+  const displayHostname = getHostnameWithoutProtocol(url);
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-8">
@@ -168,28 +180,18 @@ const RouteList = () => {
           <h2 className="text-xl font-medium">Discovered Routes</h2>
           <div className="text-sm text-muted-foreground mt-1">
             Found {routes.length} routes on{" "}
-            {routes.length > 0 && (
-              <span className="inline-flex items-center">
-                <AnimatedText
-                  text={new URL(routes[0]?.url || "").hostname}
-                  gradientColors="linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6)"
-                  gradientAnimationDuration={3}
-                  className="py-0 inline-flex"
-                  textClassName="text-sm font-medium"
-                  preserveDefaultSize={false}
-                />
-              </span>
-            )}
-            {routes.length === 0 && url && (
-              <span>
-                {
-                  new URL(url.startsWith("http") ? url : `https://${url}`)
-                    .hostname
-                }
-              </span>
-            )}{" "}
+            <span className="inline-flex items-center">
+              <AnimatedText
+                text={displayHostname}
+                gradientColors="linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6)"
+                gradientAnimationDuration={3}
+                className="py-0 inline-flex"
+                textClassName="text-sm font-medium"
+                preserveDefaultSize={false}
+              />
+            </span>
             {routes.length > ROUTES_PER_PAGE &&
-              `(showing ${(currentPage - 1) * ROUTES_PER_PAGE + 1}-${Math.min(
+              ` (showing ${(currentPage - 1) * ROUTES_PER_PAGE + 1}-${Math.min(
                 currentPage * ROUTES_PER_PAGE,
                 routes.length
               )})`}
