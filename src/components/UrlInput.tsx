@@ -51,20 +51,41 @@ const UrlInput = () => {
     setIsFocused(false);
   };
 
+  const performSearch = () => {
+    // Process the URL first for validation if needed
+    const trimmedUrl = url.trim();
+
+    if (trimmedUrl) {
+      fetchRoutes(resultsCount);
+    } else {
+      // If the URL is empty, focus the input field for better UX
+      inputRef.current?.focus();
+      // Optionally set an error message
+      setUrl("insert a url");
+      setTimeout(() => {
+        if (url === "insert a url") {
+          setUrl("");
+        }
+      }, 1500);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (url.trim()) {
-      fetchRoutes(resultsCount);
-    }
+    performSearch();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (url.trim()) {
-        fetchRoutes(resultsCount);
-      }
+      performSearch();
     }
+  };
+
+  // Direct click handler for the button to ensure it works properly
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    performSearch();
   };
 
   return (
@@ -204,7 +225,8 @@ const UrlInput = () => {
 
           {/* Submit Button - Full width on mobile, normal on desktop */}
           <Button
-            type="submit"
+            type="button"
+            onClick={handleButtonClick}
             disabled={isLoading || !url.trim()}
             className="h-12 rounded-xl rounded-t-none sm:rounded-xl w-full sm:w-auto px-5 transition-all duration-300"
             aria-label={isLoading ? "Scanning routes" : "Find routes"}

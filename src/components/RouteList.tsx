@@ -131,7 +131,7 @@ const RouteList = () => {
           <Compass size={28} className="text-muted-foreground" />
         </div>
         <h2 className="text-xl font-medium">No Routes Found</h2>
-        <p className="text-muted-foreground text-center max-w-md mt-2">
+        <div className="text-sm text-muted-foreground text-center max-w-md mt-2">
           We couldn't find any routes for the provided URL. Please verify the
           URL is correct and try again.
           {url && (
@@ -150,7 +150,7 @@ const RouteList = () => {
               />
             </span>
           )}
-        </p>
+        </div>
       </div>
     );
   }
@@ -166,7 +166,7 @@ const RouteList = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-6">
         <div>
           <h2 className="text-xl font-medium">Discovered Routes</h2>
-          <p className="text-sm text-muted-foreground mt-1">
+          <div className="text-sm text-muted-foreground mt-1">
             Found {routes.length} routes on{" "}
             {routes.length > 0 && (
               <span className="inline-flex items-center">
@@ -193,7 +193,7 @@ const RouteList = () => {
                 currentPage * ROUTES_PER_PAGE,
                 routes.length
               )})`}
-          </p>
+          </div>
         </div>
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <button
@@ -224,7 +224,7 @@ const RouteList = () => {
         </div>
       </div>
 
-      <div className="grid gap-3 mt-8">
+      <div className="grid grid-cols-1 gap-3 mt-8">
         {currentRoutes.map((route, index) => (
           <RouteCard
             key={`${route.path}-${index}`}

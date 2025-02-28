@@ -82,7 +82,7 @@ const RouteCard: React.FC<RouteCardProps> = ({
 
       {/* Content container with original background */}
       <div
-        className={`relative rounded-lg bg-card p-4 text-foreground transition-all duration-300 ${
+        className={`relative rounded-lg bg-card p-3 sm:p-4 text-foreground transition-all duration-300 ${
           hovered ? "transform scale-[1.02]" : ""
         } hover:shadow-md border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer`}
         onClick={handleCardClick}
@@ -90,14 +90,14 @@ const RouteCard: React.FC<RouteCardProps> = ({
         aria-label={`Route to ${displayUrl}`}
         onKeyDown={(e) => e.key === "Enter" && handleCardClick()}
       >
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col sm:flex-row items-start justify-between gap-2 sm:gap-0">
           <div className="flex-1 min-w-0">
             {/* Main URL display - emphasized */}
             <div className="flex items-center gap-2">
               <Globe size={16} className="text-primary flex-shrink-0" />
               <LinkPreview url={url} width={300} height={180} quality={75}>
                 <h3
-                  className="font-medium truncate hover:text-primary transition-colors"
+                  className="font-medium truncate hover:text-primary transition-colors max-w-[calc(100vw-120px)] sm:max-w-full"
                   title={url}
                 >
                   {displayUrl}
@@ -108,7 +108,7 @@ const RouteCard: React.FC<RouteCardProps> = ({
             {/* Title when available */}
             {title && (
               <p
-                className="text-sm font-medium text-foreground truncate mt-2"
+                className="text-sm font-medium text-foreground truncate mt-2 max-w-[calc(100vw-100px)] sm:max-w-full"
                 title={title}
               >
                 {title}
@@ -117,7 +117,7 @@ const RouteCard: React.FC<RouteCardProps> = ({
 
             {/* Path information */}
             <p
-              className="text-xs text-muted-foreground/70 truncate mt-1"
+              className="text-xs text-muted-foreground/70 truncate mt-1 max-w-[calc(100vw-100px)] sm:max-w-full"
               title={path}
             >
               {path}
@@ -135,26 +135,26 @@ const RouteCard: React.FC<RouteCardProps> = ({
             )}
           </div>
           <div
-            className="flex items-center space-x-2 ml-4"
+            className="flex items-center space-x-2 sm:ml-4 mt-2 sm:mt-0"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={copyToClipboard}
-              className="p-2 rounded-full hover:bg-secondary transition-colors"
+              className="p-2 rounded-full hover:bg-secondary transition-colors touch-action-manipulation"
               title="Copy URL"
               aria-label="Copy URL to clipboard"
             >
               {copied ? (
-                <Check size={16} className="text-green-500" />
+                <Check size={18} className="text-green-500" />
               ) : (
-                <Copy size={16} className="text-muted-foreground" />
+                <Copy size={18} className="text-muted-foreground" />
               )}
             </button>
             <a
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full hover:bg-secondary transition-colors"
+              className="p-2 rounded-full hover:bg-secondary transition-colors touch-action-manipulation"
               title="Open URL"
               aria-label="Open URL in new tab"
               tabIndex={0}
@@ -163,7 +163,7 @@ const RouteCard: React.FC<RouteCardProps> = ({
                 window.open(url, "_blank", "noopener,noreferrer")
               }
             >
-              <ExternalLink size={16} className="text-muted-foreground" />
+              <ExternalLink size={18} className="text-muted-foreground" />
             </a>
           </div>
         </div>
