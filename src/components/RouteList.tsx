@@ -7,6 +7,12 @@ import { LinkPreview } from "./ui/link-preview";
 import { toast } from "sonner";
 import { AnimatedText } from "./ui/animated-shiny-text";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
+import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
@@ -198,31 +204,53 @@ const RouteList = () => {
           </div>
         </div>
         <div className="flex items-center gap-2 w-full sm:w-auto">
-          <button
-            onClick={handleDownloadRoutes}
-            className="flex-1 sm:flex-initial text-sm flex items-center justify-center gap-1 px-3 py-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors select-none"
-            aria-label="Download all routes"
-          >
-            <span>Download All</span>
-            <Download size={14} />
-          </button>
-          <LinkPreview
-            url={url.startsWith("http") ? url : `https://${url}`}
-            width={400}
-            height={250}
-            quality={80}
-            className="flex-1 sm:flex-initial"
-          >
-            <a
-              href={url.startsWith("http") ? url : `https://${url}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 sm:flex-initial text-sm flex items-center justify-center gap-1 px-3 py-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors w-full select-none"
-            >
-              <span>Visit Site</span>
-              <ExternalLink size={14} />
-            </a>
-          </LinkPreview>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={handleDownloadRoutes}
+                  className="flex-1 sm:flex-initial text-sm flex items-center justify-center gap-1 px-3 py-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors select-none"
+                  aria-label="Download all routes"
+                >
+                  <span>Download All</span>
+                  <Download size={14} />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent showArrow>
+                <p>Download all routes as a text file</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <LinkPreview
+                  url={url.startsWith("http") ? url : `https://${url}`}
+                  width={400}
+                  height={250}
+                  quality={80}
+                  className="flex-1 sm:flex-initial"
+                >
+                  <a
+                    href={url.startsWith("http") ? url : `https://${url}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 sm:flex-initial text-sm flex items-center justify-center gap-1 px-3 py-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors w-full select-none"
+                  >
+                    <span>Visit Site</span>
+                    <ExternalLink size={14} />
+                  </a>
+                </LinkPreview>
+              </TooltipTrigger>
+              <TooltipContent showArrow>
+                <div className="space-y-1">
+                  <p className="text-[13px] font-medium">Visit Website</p>
+                  <p className="text-xs text-muted-foreground">
+                    Open the website in a new tab
+                  </p>
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
 
@@ -245,23 +273,43 @@ const RouteList = () => {
           <PaginationContent>
             {/* Previous page button */}
             <PaginationItem>
-              <PaginationPrevious
-                onClick={() => handlePageChange(currentPage - 1)}
-                className={`cursor-pointer ${
-                  currentPage === 1 ? "pointer-events-none opacity-50" : ""
-                }`}
-              />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <PaginationPrevious
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      className={`cursor-pointer ${
+                        currentPage === 1
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }`}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Previous page</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </PaginationItem>
 
             {/* Page numbers */}
             {currentPage > 1 && (
               <PaginationItem>
-                <PaginationLink
-                  onClick={() => handlePageChange(1)}
-                  className="cursor-pointer"
-                >
-                  1
-                </PaginationLink>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <PaginationLink
+                        onClick={() => handlePageChange(1)}
+                        className="cursor-pointer"
+                      >
+                        1
+                      </PaginationLink>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>First page</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </PaginationItem>
             )}
 
@@ -273,29 +321,56 @@ const RouteList = () => {
 
             {currentPage > 2 && (
               <PaginationItem>
-                <PaginationLink
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  className="cursor-pointer"
-                >
-                  {currentPage - 1}
-                </PaginationLink>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <PaginationLink
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        className="cursor-pointer"
+                      >
+                        {currentPage - 1}
+                      </PaginationLink>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Page {currentPage - 1}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </PaginationItem>
             )}
 
             <PaginationItem>
-              <PaginationLink isActive className="cursor-default">
-                {currentPage}
-              </PaginationLink>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <PaginationLink isActive className="cursor-default">
+                      {currentPage}
+                    </PaginationLink>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Current page</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </PaginationItem>
 
             {currentPage < totalPages - 1 && (
               <PaginationItem>
-                <PaginationLink
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  className="cursor-pointer"
-                >
-                  {currentPage + 1}
-                </PaginationLink>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <PaginationLink
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        className="cursor-pointer"
+                      >
+                        {currentPage + 1}
+                      </PaginationLink>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Page {currentPage + 1}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </PaginationItem>
             )}
 
@@ -307,25 +382,43 @@ const RouteList = () => {
 
             {currentPage < totalPages && (
               <PaginationItem>
-                <PaginationLink
-                  onClick={() => handlePageChange(totalPages)}
-                  className="cursor-pointer"
-                >
-                  {totalPages}
-                </PaginationLink>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <PaginationLink
+                        onClick={() => handlePageChange(totalPages)}
+                        className="cursor-pointer"
+                      >
+                        {totalPages}
+                      </PaginationLink>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Last page</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </PaginationItem>
             )}
 
             {/* Next page button */}
             <PaginationItem>
-              <PaginationNext
-                onClick={() => handlePageChange(currentPage + 1)}
-                className={`cursor-pointer ${
-                  currentPage === totalPages
-                    ? "pointer-events-none opacity-50"
-                    : ""
-                }`}
-              />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <PaginationNext
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      className={`cursor-pointer ${
+                        currentPage === totalPages
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }`}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Next page</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </PaginationItem>
           </PaginationContent>
         </Pagination>

@@ -3,6 +3,12 @@ import { ExternalLink, Copy, Check, Globe } from "lucide-react";
 import { toast } from "sonner";
 import { LinkPreview } from "./ui/link-preview";
 import { GlowEffect } from "./ui/glow-effect";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 interface RouteCardProps {
   path: string;
@@ -59,116 +65,159 @@ const RouteCard: React.FC<RouteCardProps> = ({
   };
 
   return (
-    <div
-      className="relative opacity-0 animate-fade-in"
-      style={{ animationDelay }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* Glow effect with smooth transition */}
+    <TooltipProvider>
       <div
-        className={`absolute -inset-[2px] rounded-lg z-0 transition-opacity duration-300 ease-in-out ${
-          hovered ? "opacity-70" : "opacity-0"
-        }`}
+        className="relative opacity-0 animate-fade-in"
+        style={{ animationDelay }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
-        <GlowEffect
-          colors={generateGlowColors()}
-          mode="colorShift"
-          blur="medium"
-          scale={1.0}
-          duration={3}
-        />
-      </div>
+        {/* Glow effect with smooth transition */}
+        <div
+          className={`absolute -inset-[2px] rounded-lg z-0 transition-opacity duration-300 ease-in-out ${
+            hovered ? "opacity-70" : "opacity-0"
+          }`}
+        >
+          <GlowEffect
+            colors={generateGlowColors()}
+            mode="colorShift"
+            blur="medium"
+            scale={1.0}
+            duration={3}
+          />
+        </div>
 
-      {/* Content container with original background */}
-      <div
-        className={`relative rounded-lg bg-card p-3 sm:p-4 text-foreground transition-all duration-300 ${
-          hovered ? "transform scale-[1.02]" : ""
-        } hover:shadow-md border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer`}
-        onClick={handleCardClick}
-        tabIndex={0}
-        aria-label={`Route to ${displayUrl}`}
-        onKeyDown={(e) => e.key === "Enter" && handleCardClick()}
-      >
-        <div className="flex flex-col sm:flex-row items-start justify-between gap-2 sm:gap-0">
-          <div className="flex-1 min-w-0">
-            {/* Main URL display - emphasized */}
-            <div className="flex items-center gap-2">
-              <Globe size={16} className="text-primary flex-shrink-0" />
-              <LinkPreview url={url} width={300} height={180} quality={75}>
-                <h3
-                  className="font-medium truncate hover:text-primary transition-colors max-w-[calc(100vw-120px)] sm:max-w-full"
-                  title={url}
-                >
-                  {displayUrl}
-                </h3>
-              </LinkPreview>
-            </div>
-
-            {/* Title when available */}
-            {title && (
-              <p
-                className="text-sm font-medium text-foreground truncate mt-2 max-w-[calc(100vw-100px)] sm:max-w-full"
-                title={title}
-              >
-                {title}
-              </p>
-            )}
-
-            {/* Path information */}
-            <p
-              className="text-xs text-muted-foreground/70 truncate mt-1 max-w-[calc(100vw-100px)] sm:max-w-full"
-              title={path}
-            >
-              {path}
-            </p>
-
-            {/* Description section that expands on click */}
-            {description && (
-              <div
-                className={`mt-2 overflow-hidden transition-all duration-300 ${
-                  expanded ? "max-h-32" : "max-h-0"
-                }`}
-              >
-                <p className="text-sm text-muted-foreground">{description}</p>
+        {/* Content container with original background */}
+        <div
+          className={`relative rounded-lg bg-card p-3 sm:p-4 text-foreground transition-all duration-300 ${
+            hovered ? "transform scale-[1.02]" : ""
+          } hover:shadow-md border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer`}
+          onClick={handleCardClick}
+          tabIndex={0}
+          aria-label={`Route to ${displayUrl}`}
+          onKeyDown={(e) => e.key === "Enter" && handleCardClick()}
+        >
+          <div className="flex flex-col sm:flex-row items-start justify-between gap-2 sm:gap-0">
+            <div className="flex-1 min-w-0">
+              {/* Main URL display - emphasized */}
+              <div className="flex items-center gap-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Globe size={16} className="text-primary flex-shrink-0" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Website URL</p>
+                  </TooltipContent>
+                </Tooltip>
+                <LinkPreview url={url} width={300} height={180} quality={75}>
+                  <h3
+                    className="font-medium truncate hover:text-primary transition-colors max-w-[calc(100vw-120px)] sm:max-w-full"
+                    title={url}
+                  >
+                    {displayUrl}
+                  </h3>
+                </LinkPreview>
               </div>
-            )}
-          </div>
-          <div
-            className="flex items-center space-x-2 sm:ml-4 mt-2 sm:mt-0"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={copyToClipboard}
-              className="p-2 rounded-full hover:bg-secondary transition-colors touch-action-manipulation"
-              title="Copy URL"
-              aria-label="Copy URL to clipboard"
-            >
-              {copied ? (
-                <Check size={18} className="text-green-500" />
-              ) : (
-                <Copy size={18} className="text-muted-foreground" />
+
+              {/* Title when available */}
+              {title && (
+                <p
+                  className="text-sm font-medium text-foreground truncate mt-2 max-w-[calc(100vw-100px)] sm:max-w-full"
+                  title={title}
+                >
+                  {title}
+                </p>
               )}
-            </button>
-            <a
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 rounded-full hover:bg-secondary transition-colors touch-action-manipulation"
-              title="Open URL"
-              aria-label="Open URL in new tab"
-              tabIndex={0}
-              onKeyDown={(e) =>
-                e.key === "Enter" &&
-                window.open(url, "_blank", "noopener,noreferrer")
-              }
+
+              {/* Path information */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <p
+                    className="text-xs text-muted-foreground/70 truncate mt-1 max-w-[calc(100vw-100px)] sm:max-w-full"
+                    title={path}
+                  >
+                    {path}
+                  </p>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Route path</p>
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Description section that expands on click */}
+              {description && (
+                <div
+                  className={`mt-2 overflow-hidden transition-all duration-300 ${
+                    expanded ? "max-h-32" : "max-h-0"
+                  }`}
+                >
+                  <p className="text-sm text-muted-foreground">{description}</p>
+                </div>
+              )}
+
+              {/* Hint about expandable description */}
+              {description && !expanded && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="inline-block text-xs text-primary mt-1 cursor-pointer">
+                      {expanded ? "Show less" : "Click to expand"}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Click to view description</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+            </div>
+            <div
+              className="flex items-center space-x-2 sm:ml-4 mt-2 sm:mt-0"
+              onClick={(e) => e.stopPropagation()}
             >
-              <ExternalLink size={18} className="text-muted-foreground" />
-            </a>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={copyToClipboard}
+                    className="p-2 rounded-full hover:bg-secondary transition-colors touch-action-manipulation"
+                    aria-label="Copy URL to clipboard"
+                  >
+                    {copied ? (
+                      <Check size={18} className="text-green-500" />
+                    ) : (
+                      <Copy size={18} className="text-muted-foreground" />
+                    )}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent showArrow>
+                  <p>{copied ? "Copied!" : "Copy URL"}</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full hover:bg-secondary transition-colors touch-action-manipulation"
+                    aria-label="Open URL in new tab"
+                    tabIndex={0}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" &&
+                      window.open(url, "_blank", "noopener,noreferrer")
+                    }
+                  >
+                    <ExternalLink size={18} className="text-muted-foreground" />
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent showArrow>
+                  <p>Open in new tab</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 };
 
