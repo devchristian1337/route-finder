@@ -25,7 +25,8 @@ import {
 const ROUTES_PER_PAGE = 10;
 
 const RouteList = () => {
-  const { routes, isLoading, error, url, hasSearched } = useRouteStore();
+  const { routes, isLoading, error, url, lastSearchedUrl, hasSearched } =
+    useRouteStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -73,7 +74,7 @@ const RouteList = () => {
 
     try {
       // Format the routes data in a structured way
-      const hostname = getHostnameWithoutProtocol(url);
+      const hostname = getHostnameWithoutProtocol(lastSearchedUrl || url);
       const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
       const filename = `routes-${hostname}-${timestamp}.txt`;
 
@@ -144,7 +145,7 @@ const RouteList = () => {
     );
   }
 
-  if (routes.length === 0 && url && hasSearched) {
+  if (routes.length === 0 && lastSearchedUrl && hasSearched) {
     return (
       <div className="flex flex-col items-center justify-center py-16 animate-fade-in">
         <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
@@ -154,11 +155,11 @@ const RouteList = () => {
         <div className="text-sm text-muted-foreground text-center max-w-md mt-2">
           We couldn't find any routes for the provided URL. Please verify the
           URL is correct and try again.
-          {url && (
+          {lastSearchedUrl && (
             <span className="block mt-2 text-center">
               URL:
               <AnimatedText
-                text={getHostnameWithoutProtocol(url)}
+                text={getHostnameWithoutProtocol(lastSearchedUrl)}
                 gradientColors="linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6)"
                 gradientAnimationDuration={3}
                 className="py-0 inline-flex ml-1"
@@ -177,7 +178,7 @@ const RouteList = () => {
   }
 
   const currentRoutes = getCurrentPageRoutes();
-  const displayHostname = getHostnameWithoutProtocol(url);
+  const displayHostname = getHostnameWithoutProtocol(lastSearchedUrl || url);
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-8">
@@ -224,14 +225,22 @@ const RouteList = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <LinkPreview
-                  url={url.startsWith("http") ? url : `https://${url}`}
+                  url={
+                    (lastSearchedUrl || url).startsWith("http")
+                      ? lastSearchedUrl || url
+                      : `https://${lastSearchedUrl || url}`
+                  }
                   width={400}
                   height={250}
                   quality={80}
                   className="flex-1 sm:flex-initial"
                 >
                   <a
-                    href={url.startsWith("http") ? url : `https://${url}`}
+                    href={
+                      (lastSearchedUrl || url).startsWith("http")
+                        ? lastSearchedUrl || url
+                        : `https://${lastSearchedUrl || url}`
+                    }
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 sm:flex-initial text-sm flex items-center justify-center gap-1 px-3 py-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors w-full select-none"
