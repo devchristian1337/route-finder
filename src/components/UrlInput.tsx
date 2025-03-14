@@ -121,7 +121,7 @@ const UrlInput = () => {
                         onBlur={handleBlur}
                         onKeyDown={handleKeyDown}
                         placeholder="Enter website URL (e.g., example.com)"
-                        className="h-12 border-0 bg-transparent focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base placeholder:text-muted-foreground/70 truncate pr-8 select-none"
+                        className="h-12 border-0 bg-transparent focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base placeholder:text-muted-foreground/70 truncate pr-8"
                         disabled={isLoading}
                         aria-label="Website URL"
                         spellCheck={false}
@@ -169,7 +169,7 @@ const UrlInput = () => {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-8 px-2 text-muted-foreground hover:text-foreground focus:ring-0"
+                          className="h-8 px-2 text-muted-foreground hover:text-foreground focus:ring-0 select-none"
                           aria-label="Adjust maximum results"
                           disabled={isLoading}
                         >
@@ -185,7 +185,7 @@ const UrlInput = () => {
                         <div className="space-y-4">
                           <div className="flex items-center justify-between">
                             <h4 className="font-medium">Maximum Results</h4>
-                            <span className="text-sm font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded">
+                            <span className="text-sm font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded select-none">
                               {resultsCount}
                             </span>
                           </div>
