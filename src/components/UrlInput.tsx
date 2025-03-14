@@ -121,7 +121,7 @@ const UrlInput = () => {
                         onBlur={handleBlur}
                         onKeyDown={handleKeyDown}
                         placeholder="Enter website URL (e.g., example.com)"
-                        className="h-12 border-0 bg-transparent focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base placeholder:text-muted-foreground/70 truncate pr-8"
+                        className="h-12 border-0 bg-transparent focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base placeholder:text-muted-foreground/70 truncate pr-8 select-none"
                         disabled={isLoading}
                         aria-label="Website URL"
                         spellCheck={false}
